@@ -37,7 +37,7 @@ case class ControlFileTimestamped(file: File, val timestamp: DateTime) {
 case class DataFile(file: String, parsedDate: String)
 
 /** A file to be uploaded, with associated business date directory and date-time */
-case class DataFileTimestamped(file: String, parsedDate: String, val timestamp: DateTime) {
+case class DataFileTimestamped(file: String, parsedDate: String, timestamp: DateTime) {
   def toDataFile = DataFile(file, parsedDate)
 }
 
@@ -54,7 +54,7 @@ object Input {
   /**
     * Find files from a directory matching a given file pattern, with `DateTime`s returned.
     *
-    * See the description of the file pattern at [[au.cba.com.omnia.meastro.core.task.Upload]]
+    * See the description of the file pattern at [[au.com.cba.omnia.maestro.core.task.Upload]]
     */
   def findFiles(
     sourceDir: String, tablename: String, filePattern: String, controlPattern: Regex, timeZone: DateTimeZone

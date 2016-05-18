@@ -59,14 +59,12 @@ object InputParsers extends Parsers {
   }
 
   /**
-    * Pass in table name and file pattern and get back a matching function on file names.
+    * Pass in timezone, table name and file pattern and get back a matching function on file names.
     *
     * Both the pattern parsing and the matching functions can fail with an error message.
     */
-  def forPattern(timeZone: DateTimeZone)(
-    tableName: String, pattern: String
-  ): Result[String => Result[MatchResult]] =
-    PatternParserTZ(timeZone).pattern(tableName)(new CharSequenceReader(pattern)) match {
+  def forPattern(tz: DateTimeZone)(tableName: String, pattern: String): Result[String => Result[MatchResult]] =
+    PatternParser.pattern(tableName, tz)(new CharSequenceReader(pattern)) match {
       case NoSuccess(msg, _) => Result.fail(msg)
       case Success(fileNameParser, _) => {
         val func: String => Result[MatchResult] =
@@ -96,8 +94,10 @@ object InputParsers extends Parsers {
   /**
     * Input file name parser
     *
-    * Parses a file name and returns the directories which the file should be
-    * placed in.
+    * Parses a file name and returns a list of the path parts to the destination
+    * directory, (e.g., for daily files: YYYY/MM/DD) along with the
+    * corresponding `DateTime`. Unused components to the `DateTime` default to
+    * the least valid value (E.g., for yearly files: January 1st 00:00).
     */
   type FileNameParser = Parser[(List[String], DateTime)]
 
@@ -116,7 +116,7 @@ object InputParsers extends Parsers {
     /**
       * Sequential composition with another partial file name parser
       *
-      * It is a parse error (not failure) if the date time fields are consistent.
+      * It is a parse error (not failure) if the date time fields are inconsistent.
       */
     def followedBy(other: PartialParser) = {
       val combinedFields = (fields ++ other.fields).distinct
@@ -133,7 +133,9 @@ object InputParsers extends Parsers {
       *
       * Given two date times, and a list of fields defined in each date time,
       * return a new date time containing the union of all fields. It is an
-      * error if the date times have different values for any field
+      * error if the date times have different values for any field, since
+      * parsers should always yield only a single date time, even if some
+      * or all components are repeated.
       */
     def combineDateTimes(
       dt1: DateTime, fs1: List[DateTimeFieldType], dt2: DateTime, fs2: List[DateTimeFieldType]
@@ -161,12 +163,12 @@ object InputParsers extends Parsers {
     Parser(in => if (in.atEnd) Success((), in) else Failure("not at EOF", in))
 
   /**
-    * List of `PatternParser`s
+    * Methods for producing `PatternParser`s for a specific time zone.
     *
     * The important one is `pattern`: this parses the whole file pattern
     * and returns the complete file name parser
     */
-  case class PatternParserTZ(timeZone: DateTimeZone) {
+  object PatternParser {
     val esc       = '\\'
     val one       = '?'
     val any       = '*'
@@ -199,10 +201,10 @@ object InputParsers extends Parsers {
       * It is an error if the pattern inside curly braces is not a valid
       * timestamp format (except for "{table}", of course).
       */
-    val timestamp: PatternParser = for {
+    def timestamp(tz: DateTimeZone): PatternParser = for {
       tsPattern <- surround(rep(escape(end))) ^^ (_.mkString)
       fnParser  <- if (tsPattern == tableSign) failure("'table' matches the table name, not a date time")
-                   else                        toParser(PartialParser.timestamp(timeZone)(tsPattern))
+                   else                        toParser(PartialParser.timestamp(tz, tsPattern))
     } yield fnParser
 
     /** Parse a question mark */
@@ -221,16 +223,16 @@ object InputParsers extends Parsers {
       * for the subsequent element to succeed. This makes the wildcard slightly
       * less convienient, but hopefully more predictable.
       */
-    def unknownSeq(tableName: String): PatternParser =
-      rep1(accept(any)) ~> (literal(tableName) | timestamp | unknown | finished) ^^ (PartialParser.anyUntil(_))
+    def unknownSeq(tableName: String, tz: DateTimeZone): PatternParser =
+      rep1(accept(any)) ~> (literal(tableName) | timestamp(tz) | unknown | finished) ^^ (PartialParser.anyUntil(_))
 
     /** Match a single element element */
-    def part(tableName: String): PatternParser =
-      literal(tableName) | timestamp | unknown | unknownSeq(tableName)
+    def part(tableName: String, tz: DateTimeZone): PatternParser =
+      literal(tableName) | timestamp(tz) | unknown | unknownSeq(tableName, tz)
 
     /** Parses a file pattern, returning the subsequent file name parser */
-    def pattern(tableName: String): Parser[FileNameParser] = for {
-      parts     <- rep(part(tableName))
+    def pattern(tableName: String, tz: DateTimeZone): Parser[FileNameParser] = for {
+      parts     <- rep(part(tableName, tz))
       _         <- eof
       raw       =  parts.foldRight(PartialParser.finished)(_ followedBy _)
       validated <- toParser(PartialParser.validate(raw))
@@ -268,8 +270,8 @@ object InputParsers extends Parsers {
       * We try to ensure that the parser does not allow joda-time to parse
       * a negative year.
       */
-    def timestamp(timeZone: DateTimeZone)(pattern: String): Result[PartialParser] = for {
-      formatter <- Result.safe(DateTimeFormat.forPattern(pattern).withZone(timeZone))
+    def timestamp(tz: DateTimeZone, pattern: String): Result[PartialParser] = for {
+      formatter <- Result.safe(DateTimeFormat.forPattern(pattern).withZone(tz))
       fields    <- fromOption(DateFormatInfo.fields(formatter),
         s"Could not find fields in date time pattern <$pattern>."
       )
@@ -284,11 +286,12 @@ object InputParsers extends Parsers {
         else {
           val underlying = in.source.toString
           val pos = in.offset
-          val mutDateTime = new MutableDateTime(1970, 1, 1, 0, 0, 0, 0, timeZone)  // Set defaults for fields
+          val mutDateTime = new MutableDateTime(1970, 1, 1, 0, 0, 0, 0, tz)  // Set defaults for fields
           val parseRes = Result.safe(formatter.parseInto(mutDateTime, underlying, pos))
           val dateTime = mutDateTime.toDateTime
-          parseRes.foldMessage(
-            { newPosOrFailPos => if (newPosOrFailPos >= 0) {  // have newPos
+
+          parseRes.foldMessage(newPosOrFailPos =>
+            if (newPosOrFailPos >= 0) {  // have newPos
               Success(dateTime, new CharSequenceReader(underlying, newPosOrFailPos))
             } else {
               val failPos = ~newPosOrFailPos
@@ -297,8 +300,7 @@ object InputParsers extends Parsers {
               val afterFail = underlying.substring(failPos, underlying.length)
               val msg = s"Failed to parse date time. Date time started at the '@' and failed at the '!' here: $beforeStart @ $beforeFail ! $afterFail"
               Failure(msg, new CharSequenceReader(underlying, failPos))
-            }},
-            { msg => Error(msg, in) }
+            }, msg => Error(msg, in)
           )
         }
       }
@@ -311,8 +313,7 @@ object InputParsers extends Parsers {
       * Turns a PartialParser into a FileNameParser.
       *
       * Checks that the fields in the file pattern are valid. The restrictions
-      * on file pattern fields are described in
-      * [[au.cba.com.omnia.maestro.core.task.Upload]].
+      * on file pattern fields are described in [[au.com.cba.omnia.maestro.task.UploadExecution]].
       */
     def validate(parser: PartialParser): Result[FileNameParser] = for {
       _           <- Result.guard(parser.fields.nonEmpty, s"no date time fields found")
