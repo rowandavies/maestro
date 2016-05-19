@@ -20,7 +20,7 @@ import org.specs2.matcher.ThrownExpectations
 
 import java.io.File
 
-import org.joda.time.{DateTime, DateTimeZone}, DateTimeZone.UTC
+import org.joda.time.{DateTime, DateTimeZone, Period}, DateTimeZone.UTC
 
 import au.com.cba.omnia.omnitool.{Result, Ok, Error}
 
@@ -103,8 +103,8 @@ control files
     val dt = new DateTime(2014, 6, 5, 9, 0, UTC)
     val f1 = new File(dirs.testDirS, "local2014060509.CTL")
     val f2 = new File(dirs.testDirS, "local2014060509.DAT")
-    val ctrl1 = ControlFileTimestamped(f1, dt)
-    val data2 = DataFileTimestamped(f2.toString, List("2014", "06", "05", "09") mkString File.separator, dt)
+    val ctrl1 = ControlFileTimestamped(f1, dt, Period.hours(1))
+    val data2 = DataFileTimestamped(f2.toString, List("2014", "06", "05", "09") mkString File.separator, dt, Period.hours(1))
     f1.createNewFile
     f2.createNewFile
 

@@ -15,7 +15,7 @@
 package au.com.cba.omnia.maestro.core
 package upload
 
-import org.joda.time.{DateTime, DateTimeZone}
+import org.joda.time.{DateTime, DateTimeZone, Period}
 
 import org.specs2.Specification
 import org.specs2.matcher.ThrownExpectations
@@ -55,11 +55,15 @@ failing file pattern parsing
   def utc(y: Int, mon: Int, d: Int, h: Int = 0, min: Int = 0, s: Int = 0) =
     new DateTime(y, mon, d, h, min, s, DateTimeZone.UTC)
 
+  val (oneYear, oneMonth, oneDay, oneHour, oneMinute, oneSecond) = (
+    Period.years(1), Period.months(1), Period.days(1), Period.hours(1), Period.minutes(1), Period.seconds(1)
+  )
+
   def parseUpToDay =
     forPatternUTC("mytable", "{table}{yyyyMMdd}") must beLike {
       case Ok(matcher) => {
-        matcher("mytable20140807") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7)))
-        matcher("mytable20140830") must_== Ok(Match(List("2014", "08", "30"), utc(2014, 8, 30)))
+        matcher("mytable20140807") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7),  oneDay))
+        matcher("mytable20140830") must_== Ok(Match(List("2014", "08", "30"), utc(2014, 8, 30), oneDay))
       }
     }
 
@@ -67,35 +71,35 @@ failing file pattern parsing
     forPatternUTC("mytable", "{table}{yyyyMMddHHmmss}") must beLike {
       case Ok(matcher) => {
         matcher("mytable20140807203000") must_==
-          Ok(Match(List("2014", "08", "07", "20", "30", "00"), utc(2014, 8, 7, 20, 30, 0)))
+          Ok(Match(List("2014", "08", "07", "20", "30", "00"), utc(2014, 8, 7, 20, 30, 0), oneSecond))
       }
     }
 
   def parseDifferentFieldOrder =
     forPatternUTC("foobar", "{table}{yyyyddMM}") must beLike {
       case Ok(matcher) => {
-        matcher("foobar20140708") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7)))
+        matcher("foobar20140708") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7), oneDay))
       }
     }
 
   def parseShortYear =
     forPatternUTC("foobar", "{table}{yyMMdd}") must beLike {
       case Ok(matcher) => {
-        matcher("foobar140807") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7)))
+        matcher("foobar140807") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7), oneDay))
       }
     }
 
   def parseLiterals =
     forPatternUTC("credit", "{table}_{yyyy-MM-dd-HH}") must beLike {
       case Ok(matcher) => {
-        matcher("credit_2014-08-07-20") must_== Ok(Match(List("2014", "08", "07", "20"), utc(2014, 8, 7, 20)))
+        matcher("credit_2014-08-07-20") must_== Ok(Match(List("2014", "08", "07", "20"), utc(2014, 8, 7, 20), oneHour))
       }
     }
 
   def parseDifferentElementOrder =
     forPatternUTC("credit", "{ddMMyyyy}{table}") must beLike {
       case Ok(matcher) => {
-        matcher("07082014credit") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7)))
+        matcher("07082014credit") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7), oneDay))
       }
     }
 
@@ -103,29 +107,29 @@ failing file pattern parsing
     forPatternUTC("mytable", "{table}*{yyyyMMdd}*") must beLike {
       case Ok(matcher) => {
         matcher("mytable-foobar-2014-201408079999.foobar") must_==
-          Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7)))
+          Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7), oneDay))
       }
     }
 
   def parseQuestionMarks =
     forPatternUTC("mytable", "{table}??{yyyyMMdd}") must beLike {
       case Ok(matcher) => {
-        matcher("mytable--20140807") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7)))
-        matcher("mytable0020140807") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7)))
+        matcher("mytable--20140807") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7), oneDay))
+        matcher("mytable0020140807") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7), oneDay))
       }
     }
 
   def parseDuplicateTimestamps =
     forPatternUTC("cars", "{table}_{yyyyMMdd}_{MMyyyy}") must beLike {
       case Ok(matcher) => {
-        matcher("cars_20140807_082014") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7)))
+        matcher("cars_20140807_082014") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7), oneDay))
       }
     }
 
   def parseCombinedTimestampFields =
     forPatternUTC("cars", "{yyyy}_{table}_{MMdd}") must beLike {
       case Ok(matcher) => {
-        matcher("2014_cars_0807") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7)))
+        matcher("2014_cars_0807") must_== Ok(Match(List("2014", "08", "07"), utc(2014, 8, 7), oneDay))
       }
     }
 

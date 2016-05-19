@@ -20,7 +20,7 @@ import scala.util.matching.Regex
 
 import org.slf4j.{Logger, LoggerFactory}
 
-import org.joda.time.{DateTime, DateTimeZone}
+import org.joda.time.{DateTime, DateTimeZone, Period}
 
 import org.apache.commons.io.input.ReversedLinesFileReader
 
@@ -250,9 +250,8 @@ trait UploadExecution {
     */
   def findSources(config: UploadConfig): Execution[List[DataFile]] = for {
     dataFiles <- UploadEx.matcher(config, DateTimeZone.UTC)
-    hourPos   = 4   // Hours would be in the 4th component of the parsedDate.
     _         <- Execution.guard(
-                   dataFiles.forall(_.parsedDate.split(File.separator).length < hourPos),
+                   dataFiles.forall(_.frequency.toStandardSeconds.isGreaterThan(Period.hours(1).toStandardSeconds)),
                    s"""|Timestamps with hours are deprecated with upload and findSources, instead use
                       | uploadTimestamped, uploadUTC, findSourcesTimestamped or findSourcesUTC.
                       | Timestamps are: ${dataFiles.map(_.parsedDate)}

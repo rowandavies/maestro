@@ -12,15 +12,14 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-package au.com.cba.omnia.maestro.core
-package upload
+package au.com.cba.omnia.maestro.core.upload
 
 import scala.util.control.NonFatal
 
 import scala.util.parsing.combinator.Parsers
 import scala.util.parsing.input.CharSequenceReader
 
-import org.joda.time.{DateTime, DateTimeFieldType, MutableDateTime, DateTimeZone}
+import org.joda.time.{DateTime, DateTimeFieldType, MutableDateTime, DateTimeZone, Period}
 import org.joda.time.format.DateTimeFormat
 
 import scalaz._, Scalaz._
@@ -38,9 +37,9 @@ case object NoMatch extends MatchResult
   * The file matches the pattern.
   *
   * Also contains the directories for the file
-  * corresponding to the date time fields in the pattern.
+  * corresponding to the date time fields in the pattern, the date time, and the inferred frequency.
   */
-case class Match(dirs: List[String], stamp: DateTime) extends MatchResult
+case class Match(dirs: List[String], stamp: DateTime, frequency: Period) extends MatchResult
 
 /**
   * Contains parsers for input file patterns and input files
@@ -71,7 +70,7 @@ object InputParsers extends Parsers {
           (fileName: String) => fileNameParser(new CharSequenceReader(fileName)) match {
             case Error(msg, _)    => Result.fail(msg)
             case Failure(_, _)    => Result.ok(NoMatch)
-            case Success((dirs, stamp), _) => Result.ok(Match(dirs, stamp))
+            case Success((dirs, stamp, frequency), _) => Result.ok(Match(dirs, stamp, frequency))
           }
         Result.ok(func)
       }
@@ -96,10 +95,11 @@ object InputParsers extends Parsers {
     *
     * Parses a file name and returns a list of the path parts to the destination
     * directory, (e.g., for daily files: YYYY/MM/DD) along with the
-    * corresponding `DateTime`. Unused components to the `DateTime` default to
-    * the least valid value (E.g., for yearly files: January 1st 00:00).
+    * corresponding `DateTime` and inferred frequency (e.g., 1 day or 1 hour).
+    * Unused components in the `DateTime` default to the least valid value
+    * (E.g., for yearly files: January 1st 00:00).
     */
-  type FileNameParser = Parser[(List[String], DateTime)]
+  type FileNameParser = Parser[(List[String], DateTime, Period)]
 
   /**
     * Building block of an input file name parser.
@@ -309,6 +309,11 @@ object InputParsers extends Parsers {
       case _ => Error(s"PartialParser only works on CharSequenceReaders", in)
     }))
 
+    /** The frequencies that should be inferred for corresponding date-time fields */
+    val frequencies = Vector(
+      Period.years(1), Period.months(1), Period.days(1), Period.hours(1), Period.minutes(1), Period.seconds(1)
+    )
+
     /**
       * Turns a PartialParser into a FileNameParser.
       *
@@ -325,9 +330,9 @@ object InputParsers extends Parsers {
             val field = uploadFields(i)
             val value = dateTime.property(field).getField.get(dateTime.getMillis)
             if (field equals DateTimeFieldType.year) f"$value%04d" else f"$value%02d"
-          })
+               })
       )
-    } yield parser ^^ (dateTime => (dirFuncs map (_(dateTime)), dateTime))
+    } yield parser ^^ (dateTime => (dirFuncs map (_(dateTime)), dateTime, frequencies(fieldOrders.max)))
 
     /** Ordered list of fields we permit in upload time stamps */
     val uploadFields = List(

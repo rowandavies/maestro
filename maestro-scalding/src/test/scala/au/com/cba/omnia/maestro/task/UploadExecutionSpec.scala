@@ -14,7 +14,7 @@
 
 package au.com.cba.omnia.maestro.task
 
-import org.joda.time.{DateTime, DateTimeZone}
+import org.joda.time.{DateTime, DateTimeZone, Period}
 
 import au.com.cba.omnia.thermometer.core.ThermometerSpec
 import au.com.cba.omnia.thermometer.core.Thermometer._
@@ -237,7 +237,8 @@ Upload execution properties
     executesSuccessfully(UploadExec.findSourcesUTC(conf)) must containTheSameElementsAs(List(
       DataFileTimestamped(
         s"$root/local-ingest/dataFeed/normal/mydomain/mytable_2016100202.dat","2016/10/02/02",
-        new DateTime("2016-10-02T02:00", DateTimeZone.UTC)
+        new DateTime("2016-10-02T02:00", DateTimeZone.UTC),
+        Period.hours(1)
       )
     ))
   }
