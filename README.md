@@ -334,3 +334,4 @@ Validator.all(
   Validator.by[Customer](_.customerAcct.length == 4, "Customer accounts should always be a length of 4")
 )
 ```
+ 
