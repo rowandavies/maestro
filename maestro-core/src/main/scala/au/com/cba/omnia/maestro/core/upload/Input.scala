@@ -55,7 +55,7 @@ object Input {
   /**
     * Find files from a directory matching a given file pattern, also returning `DateTime`s and frequencies.
     *
-    * See the description of the file pattern at [[au.com.cba.omnia.maestro.core.task.Upload]]
+    * See the description of the file pattern at [[au.com.cba.omnia.maestro.core.task.Upload]].
     */
   def findFiles(
     sourceDir: String, tablename: String, filePattern: String, controlPattern: Regex, timeZone: DateTimeZone
