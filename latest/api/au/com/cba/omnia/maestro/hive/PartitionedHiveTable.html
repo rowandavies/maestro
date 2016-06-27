@@ -45,13 +45,15 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">PartitionedHiveTable</span><span class="tparams">[<span name="A">A &lt;: <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="database">database: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="partition">partition: <a href="../core/partition/Partition.html" class="extype" name="au.com.cba.omnia.maestro.core.partition.Partition">Partition</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.B">B</span>]</span>, <span name="externalPath">externalPath: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="partitionBatchSize">partitionBatchSize: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">100</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="evidence$1">evidence$1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>]</span>, <span name="evidence$2">evidence$2: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.B">B</span>]</span>, <span name="evidence$3">evidence$3: <span class="extype" name="com.twitter.scalding.TupleSetter">TupleSetter</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.B">B</span>]</span>)</span><span class="result"> extends <a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>, (<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.B">B</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>)] with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">PartitionedHiveTable</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span></span>, <span name="P">P</span>]</span><span class="params">(<span name="database">database: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="partition">partition: <a href="../core/partition/Partition.html" class="extype" name="au.com.cba.omnia.maestro.core.partition.Partition">Partition</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>]</span>, <span name="externalPath">externalPath: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="partitionBatchSize">partitionBatchSize: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">100</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="evidence$4">evidence$4: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>]</span>, <span name="evidence$5">evidence$5: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>]</span>, <span name="evidence$6">evidence$6: <span class="extype" name="com.twitter.scalding.TupleSetter">TupleSetter</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>]</span>)</span><span class="result"> extends <a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>] with <a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>, (<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>)] with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Information need to address/describe a specific partitioned hive table.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/CommBank/maestro/tree/e06bc75d418e4e0693524f5290650e998cd6bf36//maestro-scalding/src/main/scala/au/com/cba/omnia/maestro/hive/HiveTable.scala" target="_blank">HiveTable.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Information need to address/describe a specific partitioned hive table where partition
+information can be derived from thrift data.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/CommBank/maestro/tree/e981dde13440f223db85d599a9bd4840fa9c2523//maestro-scalding/src/main/scala/au/com/cba/omnia/maestro/hive/HiveTable.scala" target="_blank">HiveTable.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>, (<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.B">B</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>)], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>, (<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>)], <a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>], <a href="HiveTableSource.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTableSource">HiveTableSource</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -69,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable"><span>PartitionedHiveTable</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="au.com.cba.omnia.maestro.hive.HiveTable"><span>HiveTable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable"><span>PartitionedHiveTable</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="au.com.cba.omnia.maestro.hive.HiveTable"><span>HiveTable</span></li><li class="in" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable"><span>GenericPartitionedHiveTable</span></li><li class="in" name="au.com.cba.omnia.maestro.hive.HiveTableSource"><span>HiveTableSource</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,18 +91,18 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(database:String,table:String,partition:au.com.cba.omnia.maestro.core.partition.Partition[A,B],externalPath:Option[String],partitionBatchSize:Int)(implicitevidence$1:Manifest[A],implicitevidence$2:Manifest[B],implicitevidence$3:com.twitter.scalding.TupleSetter[B]):au.com.cba.omnia.maestro.hive.PartitionedHiveTable[A,B]"></a>
-      <a id="&lt;init&gt;:PartitionedHiveTable[A,B]"></a>
+      <a id="&lt;init&gt;(database:String,table:String,partition:au.com.cba.omnia.maestro.core.partition.Partition[T,P],externalPath:Option[String],partitionBatchSize:Int)(implicitevidence$4:Manifest[T],implicitevidence$5:Manifest[P],implicitevidence$6:com.twitter.scalding.TupleSetter[P]):au.com.cba.omnia.maestro.hive.PartitionedHiveTable[T,P]"></a>
+      <a id="&lt;init&gt;:PartitionedHiveTable[T,P]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">PartitionedHiveTable</span><span class="params">(<span name="database">database: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="partition">partition: <a href="../core/partition/Partition.html" class="extype" name="au.com.cba.omnia.maestro.core.partition.Partition">Partition</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.B">B</span>]</span>, <span name="externalPath">externalPath: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="partitionBatchSize">partitionBatchSize: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">100</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.B">B</span>]</span>, <span name="arg2">arg2: <span class="extype" name="com.twitter.scalding.TupleSetter">TupleSetter</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.B">B</span>]</span>)</span>
+        <span class="name">PartitionedHiveTable</span><span class="params">(<span name="database">database: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="partition">partition: <a href="../core/partition/Partition.html" class="extype" name="au.com.cba.omnia.maestro.core.partition.Partition">Partition</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>]</span>, <span name="externalPath">externalPath: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="partitionBatchSize">partitionBatchSize: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">100</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>]</span>, <span name="arg2">arg2: <span class="extype" name="com.twitter.scalding.TupleSetter">TupleSetter</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.com.cba.omnia.maestro.hive.PartitionedHiveTable@&lt;init&gt;(database:String,table:String,partition:au.com.cba.omnia.maestro.core.partition.Partition[A,B],externalPath:Option[String],partitionBatchSize:Int)(implicitevidence$1:Manifest[A],implicitevidence$2:Manifest[B],implicitevidence$3:com.twitter.scalding.TupleSetter[B]):au.com.cba.omnia.maestro.hive.PartitionedHiveTable[A,B]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.com.cba.omnia.maestro.hive.PartitionedHiveTable@&lt;init&gt;(database:String,table:String,partition:au.com.cba.omnia.maestro.core.partition.Partition[T,P],externalPath:Option[String],partitionBatchSize:Int)(implicitevidence$4:Manifest[T],implicitevidence$5:Manifest[P],implicitevidence$6:com.twitter.scalding.TupleSetter[P]):au.com.cba.omnia.maestro.hive.PartitionedHiveTable[T,P]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -221,7 +223,7 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable">PartitionedHiveTable</a> → <a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable">PartitionedHiveTable</a> → <a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a> → <a href="HiveTableSource.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTableSource">HiveTableSource</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -255,7 +257,24 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable">PartitionedHiveTable</a> → <a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable">PartitionedHiveTable</a> → <a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a> → <a href="HiveTableSource.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTableSource">HiveTableSource</a></dd></dl></div>
+    </li><li name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable#fieldNames" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fieldNames:List[String]"></a>
+      <a id="fieldNames:List[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fieldNames</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.com.cba.omnia.maestro.hive.PartitionedHiveTable@fieldNames:List[String]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -296,7 +315,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable#hdfsPartitionGlob" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable#hdfsPartitionGlob" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hdfsPartitionGlob:String"></a>
       <a id="hdfsPartitionGlob:String"></a>
       <h4 class="signature">
@@ -312,8 +331,8 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable#hivePartitionPattern" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a></dd></dl></div>
+    </li><li name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable#hivePartitionPattern" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hivePartitionPattern:String"></a>
       <a id="hivePartitionPattern:String"></a>
       <h4 class="signature">
@@ -329,7 +348,7 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -347,7 +366,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="au.com.cba.omnia.maestro.hive.HiveTable#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="au.com.cba.omnia.maestro.hive.HiveTableSource#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <a id="name:String"></a>
       <h4 class="signature">
@@ -363,7 +382,7 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Fully qualified SQL reference to table.</p><div class="fullcomment"><div class="comment cmt"><p>Fully qualified SQL reference to table.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a></dd></dl></div>
+      <p class="shortcomment cmt">Fully qualified SQL reference to table.</p><div class="fullcomment"><div class="comment cmt"><p>Fully qualified SQL reference to table.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HiveTableSource.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTableSource">HiveTableSource</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -416,23 +435,23 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable#partition" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="partition:au.com.cba.omnia.maestro.core.partition.Partition[A,B]"></a>
-      <a id="partition:Partition[A,B]"></a>
+      <a id="partition:au.com.cba.omnia.maestro.core.partition.Partition[T,P]"></a>
+      <a id="partition:Partition[T,P]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">partition</span><span class="result">: <a href="../core/partition/Partition.html" class="extype" name="au.com.cba.omnia.maestro.core.partition.Partition">Partition</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.B">B</span>]</span>
+        <span class="name">partition</span><span class="result">: <a href="../core/partition/Partition.html" class="extype" name="au.com.cba.omnia.maestro.core.partition.Partition">Partition</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.com.cba.omnia.maestro.hive.PartitionedHiveTable@partition:au.com.cba.omnia.maestro.core.partition.Partition[A,B]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.com.cba.omnia.maestro.hive.PartitionedHiveTable@partition:au.com.cba.omnia.maestro.core.partition.Partition[T,P]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
-    </li><li name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable#partitionBatchSize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable#partitionBatchSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="partitionBatchSize:Int"></a>
       <a id="partitionBatchSize:Int"></a>
       <h4 class="signature">
@@ -448,8 +467,8 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable#partitionGlob" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable">PartitionedHiveTable</a> → <a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a></dd></dl></div>
+    </li><li name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable#partitionGlob" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="partitionGlob:String"></a>
       <a id="partitionGlob:String"></a>
       <h4 class="signature">
@@ -465,8 +484,8 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable#partitionMetadata" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a></dd></dl></div>
+    </li><li name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable#partitionMetadata" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="partitionMetadata:List[(String,String)]"></a>
       <a id="partitionMetadata:List[(String,String)]"></a>
       <h4 class="signature">
@@ -482,24 +501,24 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">List of partition column names and type (string by default).</p>
-    </li><li name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable#source" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="source:au.com.cba.omnia.ebenezer.scrooge.PartitionParquetScroogeSource[B,A]"></a>
-      <a id="source:PartitionParquetScroogeSource[B,A]"></a>
+      <p class="shortcomment cmt">List of partition column names and type (string by default).</p><div class="fullcomment"><div class="comment cmt"><p>List of partition column names and type (string by default).</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a></dd></dl></div>
+    </li><li name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable#source" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="source:au.com.cba.omnia.ebenezer.scrooge.PartitionParquetScroogeSource[P,T]"></a>
+      <a id="source:PartitionParquetScroogeSource[P,T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">source</span><span class="result">: <a href="https://github.com/CommBank/ebenezer/index.html#au.com.cba.omnia.ebenezer.scrooge.PartitionParquetScroogeSource" class="extype" target="_top">PartitionParquetScroogeSource</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.B">B</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>]</span>
+        <span class="name">source</span><span class="result">: <a href="https://github.com/CommBank/ebenezer/index.html#au.com.cba.omnia.ebenezer.scrooge.PartitionParquetScroogeSource" class="extype" target="_top">PartitionParquetScroogeSource</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.com.cba.omnia.maestro.hive.PartitionedHiveTable@source:au.com.cba.omnia.ebenezer.scrooge.PartitionParquetScroogeSource[B,A]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.com.cba.omnia.maestro.hive.PartitionedHiveTable@source:au.com.cba.omnia.ebenezer.scrooge.PartitionParquetScroogeSource[P,T]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Creates a scalding source to read from the hive table.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a scalding source to read from the hive table.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable">PartitionedHiveTable</a> → <a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a></dd></dl></div>
+      <p class="shortcomment cmt">Creates a scalding source to read from the hive table.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a scalding source to read from the hive table.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a> → <a href="HiveTableSource.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTableSource">HiveTableSource</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -533,8 +552,8 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable">PartitionedHiveTable</a> → <a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a></dd></dl></div>
-    </li><li name="au.com.cba.omnia.maestro.hive.HiveTable#tablePath" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable">PartitionedHiveTable</a> → <a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a> → <a href="HiveTableSource.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTableSource">HiveTableSource</a></dd></dl></div>
+    </li><li name="au.com.cba.omnia.maestro.hive.HiveTableSource#tablePath" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="tablePath:org.apache.hadoop.fs.Path"></a>
       <a id="tablePath:Path"></a>
       <h4 class="signature">
@@ -550,7 +569,7 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Path of the table.</p><div class="fullcomment"><div class="comment cmt"><p>Path of the table.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a></dd></dl></div>
+      <p class="shortcomment cmt">Path of the table.</p><div class="fullcomment"><div class="comment cmt"><p>Path of the table.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HiveTableSource.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTableSource">HiveTableSource</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -621,22 +640,39 @@
               
         </dd></dl></div>
     </li><li name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable#writeExecution" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="writeExecution(pipe:com.twitter.scalding.TypedPipe[A],append:Boolean):com.twitter.scalding.Execution[com.twitter.scalding.ExecutionCounters]"></a>
-      <a id="writeExecution(TypedPipe[A],Boolean):Execution[ExecutionCounters]"></a>
+      <a id="writeExecution(pipe:com.twitter.scalding.TypedPipe[T],append:Boolean):com.twitter.scalding.Execution[com.twitter.scalding.ExecutionCounters]"></a>
+      <a id="writeExecution(TypedPipe[T],Boolean):Execution[ExecutionCounters]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">writeExecution</span><span class="params">(<span name="pipe">pipe: <span class="extype" name="com.twitter.scalding.TypedPipe">TypedPipe</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>]</span>, <span name="append">append: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.scalding.Execution">Execution</span>[<span class="extype" name="com.twitter.scalding.ExecutionCounters">ExecutionCounters</span>]</span>
+        <span class="name">writeExecution</span><span class="params">(<span name="pipe">pipe: <span class="extype" name="com.twitter.scalding.TypedPipe">TypedPipe</span>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>]</span>, <span name="append">append: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.scalding.Execution">Execution</span>[<span class="extype" name="com.twitter.scalding.ExecutionCounters">ExecutionCounters</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.com.cba.omnia.maestro.hive.PartitionedHiveTable@writeExecution(pipe:com.twitter.scalding.TypedPipe[A],append:Boolean):com.twitter.scalding.Execution[com.twitter.scalding.ExecutionCounters]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.com.cba.omnia.maestro.hive.PartitionedHiveTable@writeExecution(pipe:com.twitter.scalding.TypedPipe[T],append:Boolean):com.twitter.scalding.Execution[com.twitter.scalding.ExecutionCounters]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Creates <span class="extype" name="Execution">Execution</span> that writes to <code>this.sink</code> using given <span class="extype" name="TypedPipe">TypedPipe</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Creates <span class="extype" name="Execution">Execution</span> that writes to <code>this.sink</code> using given <span class="extype" name="TypedPipe">TypedPipe</span>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable">PartitionedHiveTable</a> → <a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a></dd></dl></div>
+      <p class="shortcomment cmt">Create <span class="extype" name="Execution">Execution</span> that writes the given <span class="extype" name="TypedPipe">TypedPipe</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Create <span class="extype" name="Execution">Execution</span> that writes the given <span class="extype" name="TypedPipe">TypedPipe</span>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable">PartitionedHiveTable</a> → <a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a></dd></dl></div>
+    </li><li name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable#writeToSink" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="writeToSink(pipe:com.twitter.scalding.TypedPipe[(P,T)],append:Boolean):com.twitter.scalding.Execution[com.twitter.scalding.ExecutionCounters]"></a>
+      <a id="writeToSink(TypedPipe[(P,T)],Boolean):Execution[ExecutionCounters]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">writeToSink</span><span class="params">(<span name="pipe">pipe: <span class="extype" name="com.twitter.scalding.TypedPipe">TypedPipe</span>[(<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>)]</span>, <span name="append">append: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.scalding.Execution">Execution</span>[<span class="extype" name="com.twitter.scalding.ExecutionCounters">ExecutionCounters</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.com.cba.omnia.maestro.hive.PartitionedHiveTable@writeToSink(pipe:com.twitter.scalding.TypedPipe[(P,T)],append:Boolean):com.twitter.scalding.Execution[com.twitter.scalding.ExecutionCounters]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -655,7 +691,11 @@
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
             </div><div class="parent" name="au.com.cba.omnia.maestro.hive.HiveTable">
-              <h3>Inherited from <a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>, (<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.B">B</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.A">A</span>)]</h3>
+              <h3>Inherited from <a href="HiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTable">HiveTable</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>, (<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>)]</h3>
+            </div><div class="parent" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">
+              <h3>Inherited from <a href="GenericPartitionedHiveTable.html" class="extype" name="au.com.cba.omnia.maestro.hive.GenericPartitionedHiveTable">GenericPartitionedHiveTable</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>, <span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.P">P</span>]</h3>
+            </div><div class="parent" name="au.com.cba.omnia.maestro.hive.HiveTableSource">
+              <h3>Inherited from <a href="HiveTableSource.html" class="extype" name="au.com.cba.omnia.maestro.hive.HiveTableSource">HiveTableSource</a>[<span class="extype" name="au.com.cba.omnia.maestro.hive.PartitionedHiveTable.T">T</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
