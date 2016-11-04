@@ -49,7 +49,7 @@ Load execution properties
 
 """
 
-  val conf = LoadConfig[StringPair](errors = "errors", timeSource = TimeSource.now(), none = "null")
+  val conf = LoadConfig[StringPair](errors = "errors", timeSource = TimeSource.nowUTC(), none = "null")
 
   def normal = {
     withEnvironment(path(getClass.getResource("/load-execution").toString)) {
@@ -99,7 +99,7 @@ Load execution properties
 
   def normalGenKey = {
     val confGenKey = LoadConfig[StringTriple](
-      errors = "errors", timeSource = TimeSource.now(), none = "null", generateKey = true
+      errors = "errors", timeSource = TimeSource.nowSydney(), none = "null", generateKey = true
     )
 
     withEnvironment(path(getClass.getResource("/load-execution").toString)) {
@@ -113,7 +113,7 @@ Load execution properties
 
   def tooLong = {
     val tripleConf = LoadConfig[StringTriple](
-      errors = "errors", timeSource = TimeSource.now(), none = "null"
+      errors = "errors", timeSource = TimeSource.nowUTC(), none = "null"
     )
 
     val data = List(
@@ -134,7 +134,7 @@ Load execution properties
 
   def tooShort = {
     val tripleConf = LoadConfig[StringTriple](
-      errors = "errors", timeSource = TimeSource.now(), none = "null"
+      errors = "errors", timeSource = TimeSource.nowUTC(), none = "null"
     )
 
     val data = List(

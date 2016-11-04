@@ -22,7 +22,7 @@ import scalaz._, Scalaz._
 import org.apache.commons.validator.routines._
 import org.apache.commons.validator.GenericValidator
 
-import org.joda.time.DateTime
+import org.joda.time.{DateTime, DateTimeZone}
 import org.joda.time.format.{DateTimeFormatter, DateTimeFormat}
 
 import au.com.cba.omnia.omnitool.{Result, Error}
@@ -65,17 +65,32 @@ object Check {
   def nonempty: Validator[String] =
     Validator(s => if (!s.isEmpty) Result.ok(s) else Result.fail("Value can not be empty."))
 
-  def isDate(pattern: String): Validator[String] = {
-    lazy val formatter = DateTimeFormat.forPattern(pattern)
+  def formatIncludesTime(formatter: DateTimeFormatter) = {
+    val someTime = new DateTime("2016-11-03T03:33:00.000-04:00")  // A time used to probe formats sensitivity to hours.
+    val parsedSomeTime = formatter.parseDateTime(formatter.print(someTime))
+
+    parsedSomeTime.withTimeAtStartOfDay() != parsedSomeTime
+  }
+
+  def isDate(pattern: String, tzOption: Option[DateTimeZone] = None): Validator[String] = {
+    val formatter = DateTimeFormat.forPattern(pattern)
+    val tz = tzOption.getOrElse(
+      if (formatIncludesTime(formatter))
+        throw new Exception("An isDate format includes time, the time zone must be specified")
+      else DateTimeZone.UTC     // All time zones have the same set of valid dates, so UTC will do.
+    )
+
     Validator(s =>
       try {
-        val date: DateTime = formatter.parseDateTime(s)
+        val date: DateTime = formatter.withZone(tz).parseDateTime(s)
         Result.ok(s)
       } catch {
-           case NonFatal(e) => Result.fail(s"Date $s is not in the format $pattern")
+           case NonFatal(e) => Result.fail(s"Date $s is not a valid date in the format $pattern in $tz")
       }
     )
   }
+  def isDateUTC(pattern: String): Validator[String] = isDate(pattern, Some(DateTimeZone.UTC))
+  def isDateSydney(pattern: String): Validator[String] = isDate(pattern, Some(DateTimeZone.forID("Australia/Sydney")))
 
   def isEmail: Validator[String]=
     Validator(s => if (GenericValidator.isEmail(s)) Result.ok(s) else Result.fail(s"Data $s not valid email"))
