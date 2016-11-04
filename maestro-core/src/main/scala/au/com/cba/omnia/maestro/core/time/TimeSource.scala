@@ -42,9 +42,15 @@ object TimeSource {
     predetermined(f.print(time))
   }
 
-  /** Use the current time as the time source */
-  def now(format: String = "yyyy-MM-dd"): TimeSource =
-    predetermined(new DateTime, format)
+  /** Use the current time as the time source, using a specified time zone. */
+  def now(format: String = "yyyy-MM-dd", tz: DateTimeZone): TimeSource =
+    predetermined(new DateTime(tz), format)
+
+  /** The current time in UTC. */
+  def nowUTC(format: String = "yyyy-MM-dd"): TimeSource = now(format, DateTimeZone.UTC)
+
+  /** The current time in Sydney. */
+  def nowSydney(format: String = "yyyy-MM-dd"): TimeSource = now(format, DateTimeZone.forID("Australia/Sydney"))
 
   /** Derive the load time from the file path */
   def fromPath(extract: String => String): TimeSource =

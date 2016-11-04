@@ -64,6 +64,8 @@ View execution properties
     view hive executions can be composed with zip                        $zippedHive
     can write to tables where the underlying folder has been deleted     $withoutFolder
     can extract and write partitioned thrift data                        $normalHiveOverwriteGeneric
+    byHour partitioning doesn't fail during daylight savings transition  $daylightSavings
+
 
   unpartitioned:
     can write to a hive table using execution monad                      $normalHiveUnpartitioned
@@ -87,6 +89,11 @@ View execution properties
       dir </> "normal" </> "A" </> "part-*.parquet" ==> matchesFile,
       dir </> "normal" </> "B" </> "part-*.parquet" ==> matchesFile
     )
+  }
+
+  def daylightSavings = {
+    val exec = ViewExec.view(ViewConfig(byHour, s"$dir/daylight-savings"), sourceDaylightSavings)
+    executesSuccessfully(exec) must_== 1
   }
 
   def zipped = {
@@ -379,6 +386,7 @@ View execution properties
 
   def byFirst  = Partition.byField(Field[StringPair, String]("first", _.first))
   def bySecond = Partition.byField(Field[StringPair, String]("second", _.second))
+  def byHour   = Partition.byHour(Field[StringPair, String]("first", _.first), "y-M-d-H-m")
 
   def source = ThermometerSource(data)
   def data = List(
@@ -393,6 +401,10 @@ View execution properties
     StringPair("B", "11"),
     StringPair("B", "22")
   )
+
+  def sourceDaylightSavings = ThermometerSource(List(
+    StringPair("2015-10-02-02-30", "11")
+  ))
 
   def matchesFile = PathFactoid((context, path) => !context.glob(path).isEmpty)
   def noMatch = PathFactoid((context, path) => context.glob(path).isEmpty)
