@@ -18,6 +18,7 @@ import scala.concurrent.Future
 
 import scalaz.{\/, Monad}
 import scalaz.\&/.{These, This, That, Both}
+import scalaz.effect.IO
 
 import com.twitter.scalding.{Config, Execution}
 
@@ -127,6 +128,17 @@ case class RichExecutionObject(exec: Execution.type) extends ResultantOps[Execut
     Execution.getConfigMode.flatMap { case (config, mode) =>
       Execution.fromFuture(cec => execution.run(config, mode)(cec))
     }
+
+  /**
+  * Changes a scalaz IO action to an Execution
+  */
+  def fromIO[A](io: IO[A]): Execution[A] = {
+    val stacktrace = Thread.currentThread.getStackTrace.tail
+    val result = Result.fromTry(scala.util.Try(io.unsafePerformIO))
+    Execution.fromFuture[A] { _ =>
+      resultToFuture(result, stacktrace)
+    }
+  }
 }
 
 object ExecutionOps extends ExecutionOps
