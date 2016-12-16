@@ -1,0 +1,4 @@
+name: maestro
+exclude: [Gemfile]
+markdown: kramdown
+releaseVersion: 2.24.3-20161216015648-af35b97
