@@ -34,14 +34,14 @@ import au.com.cba.omnia.humbug.HumbugSBT._
 object build extends Build {
   type Sett = Def.Setting[_]
 
-  val thermometerVersion = "1.4.7-20161216001105-a206f4c"
-  val ebenezerVersion    = "0.23.4-20161216011955-def01ac"
-  val beeswaxVersion     = "0.1.5-20161216005041-e8361f9"
-  val omnitoolVersion    = "1.14.3-20161216002906-b2cb441"
-  val permafrostVersion  = "0.14.4-20161216005046-69dc785"
-  val edgeVersion        = "3.7.2-20161216012055-a4bff69"
-  val humbugVersion      = "0.7.4-20161216002056-42f0895"
-  val parlourVersion     = "1.12.5-20161216003010-e146fc4"
+  val thermometerVersion = "1.4.9-20161223033419-c0ea273"
+  val ebenezerVersion    = "0.23.5-20161223061239-aff6e0a"
+  val beeswaxVersion     = "0.1.6-20161223052854-639a17b"
+  val omnitoolVersion    = "1.14.4-20161223050214-5770b8e"
+  val permafrostVersion  = "0.14.5-20161223052955-210b189"
+  val edgeVersion        = "3.7.3-20161223061419-44b8f94"
+  val humbugVersion      = "0.7.5-20161223030631-47045ea"
+  val parlourVersion     = "1.12.6-20161223050524-2ddaf21"
 
   val scalikejdbc = noHadoop("org.scalikejdbc" %% "scalikejdbc" % "2.2.6")
     .exclude("org.joda", "joda-convert")
