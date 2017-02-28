@@ -39,6 +39,7 @@ __Other__
 
 * [Github Pages](https://commbank.github.io/maestro/index.html)
 * [Extended documentation (in progress)](https://github.com/CommBank/maestro/tree/master/doc)
+* [Design Document](https://github.com/CommBank/maestro/tree/master/doc/design.md) (includes the rationale for core design decisions and the historical context)
 
 starting point
 --------------
