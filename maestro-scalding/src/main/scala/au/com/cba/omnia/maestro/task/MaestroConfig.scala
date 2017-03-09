@@ -63,6 +63,8 @@ case class MaestroConfig(
   lazy val localArchiveDir = args("archive-root")
   lazy val dbRawPrefix     = args("db-raw-prefix")
   lazy val dbRaw           = s"${dbRawPrefix}_${source}_${domain}"
+  lazy val dbDerivedPrefix = args("db-drv-prefix")
+  lazy val dbDerived       = s"${dbDerivedPrefix}_${source}_${domain}"
   lazy val dbStagingPrefix = args("db-stg-prefix")
   lazy val dbStaging       = s"${dbStagingPrefix}_${source}_${domain}"
   lazy val connString      = args("jdbc")
