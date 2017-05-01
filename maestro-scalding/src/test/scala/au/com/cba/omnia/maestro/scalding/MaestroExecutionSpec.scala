@@ -14,7 +14,13 @@
 
 package au.com.cba.omnia.maestro.scalding
 
+import com.twitter.scalding.Execution
+
+import au.com.cba.omnia.omnitool.Result
+
 import au.com.cba.omnia.thermometer.core.ThermometerSpec
+
+import ExecutionOps._
 
 object MaestroExecutionSpec extends ThermometerSpec { def is = s2"""
 
@@ -22,8 +28,10 @@ Maestro Execution functions
 ===========================
 
 Maestro Execution functions:
-  can recover `JobNotReadyError`  $jobNotReady
-  can recover `JobFailureError`   $jobFailure
+  can recover `JobNotReadyError`                             $jobNotReady
+  can recover `JobFailureError`                              $jobFailure
+  can recover `JobNotReadyError` wrapped in Result exception $jobNotReadyResultException
+  can recover `JobFailureError` wrapped in Result exception  $jobFailureResultException
 
 """
 
@@ -33,5 +41,15 @@ Maestro Execution functions:
 
   def jobFailure = {
     executesSuccessfully(MaestroExecution.recoverJobStatus(MaestroExecution.jobFailure(-2))) must_== JobFailure(-2)
+  }
+
+  def jobNotReadyResultException = {
+    val exec = Execution.fromResult(Result.safe(throw JobNotReadyException))
+    executesSuccessfully(MaestroExecution.recoverJobStatus(exec)) must_== JobNotReady
+  }
+
+  def jobFailureResultException = {
+    val exec = Execution.fromResult(Result.safe(throw JobFailureException(-2)))
+    executesSuccessfully(MaestroExecution.recoverJobStatus(exec)) must_== JobFailure(-2)
   }
 }

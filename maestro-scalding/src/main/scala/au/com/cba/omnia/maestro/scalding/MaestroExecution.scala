@@ -25,11 +25,17 @@ object MaestroExecution {
   def jobFailure[T](exitCode: Int = -1): Execution[T] =
     Execution.from[T](throw new JobFailureException(exitCode))
 
-  /** Lifts a [[JobNotReady]] or [[JobFailure]] error into a JobStatus value for execution. */
+  /** Lifts a [[JobNotReady]] or [[JobFailure]] error into a [[JobStatus]] value for execution.
+    *
+    * Due to the way that Omnitool embeds [[Result]] failures into [[Execution]], [[ResultException]]
+    * is checked (see `resultToFuture` in [[RichExecution]]).
+    */
   def recoverJobStatus(execution: Execution[JobStatus]): Execution[JobStatus] =
     execution.recoverWith {
-      case JobNotReadyException          => Execution.from(JobNotReady)
-      case JobFailureException(exitCode) => Execution.from(JobFailure(exitCode))
+      case JobNotReadyException                                       => Execution.from(JobNotReady)
+      case ResultException(_, _, Some(JobNotReadyException))          => Execution.from(JobNotReady)
+      case JobFailureException(exitCode)                              => Execution.from(JobFailure(exitCode))
+      case ResultException(_, _, Some(JobFailureException(exitCode))) => Execution.from(JobFailure(exitCode))
     }
 
   /** Iff the condition is not true changes the status of the Execution to JobNotReady. */
