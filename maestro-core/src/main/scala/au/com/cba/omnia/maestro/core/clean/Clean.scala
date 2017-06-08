@@ -30,11 +30,23 @@ object Clean {
   def trim: Clean =
     Clean((_, data) => data.trim)
 
+  /** Keep POSIX US-ASCII printables only.
+    * @see https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#posix
+    */
   def removeNonPrintables: Clean =
     Clean((_, data) => data.replaceAll("[^\\p{Print}]", ""))
 
-  def default: Clean =
-    Clean((_, data) => data.trim.replaceAll("[^\\p{Print}]", ""))
+  /** Keep Unicode printables only.
+    * @see http://www.unicode.org/reports/tr18/#Compatibility_Properties
+    */
+  def removeUnicodeNonPrintables: Clean =
+    Clean((_, data) => data.replaceAll("(?U)[^\\p{Print}]", ""))
+
+  def default: Clean = posixDefault
+
+  def posixDefault: Clean = all(trim, removeNonPrintables)
+
+  def unicodeDefault: Clean = all(trim, removeUnicodeNonPrintables)
 
   /** Allow users to apply cleaners on selected fields */
   def applyTo(conditionFn: Field[_, _] => Boolean, cleaner: Clean): Clean =
