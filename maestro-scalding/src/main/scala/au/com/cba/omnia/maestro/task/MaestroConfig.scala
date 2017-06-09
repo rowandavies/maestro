@@ -22,6 +22,8 @@ import org.joda.time.{DateTime, DateTimeZone}
 
 import scalaz.Monoid
 
+import cascading.scheme.local.TextLine
+
 import com.twitter.scrooge.ThriftStruct
 
 import com.twitter.scalding.{Args, Config, Mode, TupleSetter}
@@ -197,10 +199,11 @@ case class MaestroConfig(
     clean: Clean            = Clean.default,
     none: String            = "",
     validator: Validator[A] = Validator.pass[A],
-    errorThreshold: Double  = 0.05
+    errorThreshold: Double  = 0.05,
+    charsetEncoding: String = TextLine.DEFAULT_CHARSET
   ): LoadConfig[A] = LoadConfig(
     errors, splitter, timeSource, loadWithKey, filter, clean, none,
-    validator, errorThreshold
+    validator, errorThreshold, charsetEncoding
   )
 
   /**

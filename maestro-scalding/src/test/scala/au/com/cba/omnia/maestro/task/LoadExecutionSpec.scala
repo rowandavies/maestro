@@ -25,7 +25,6 @@ import au.com.cba.omnia.maestro.core.clean.Clean
 import au.com.cba.omnia.maestro.core.filter.RowFilter
 import au.com.cba.omnia.maestro.core.split.Splitter
 import au.com.cba.omnia.maestro.core.time.TimeSource
-import au.com.cba.omnia.maestro.core.validate.Validator
 import au.com.cba.omnia.maestro.scalding.StatKeys
 
 import au.com.cba.omnia.maestro.core.thrift.scrooge.{StringPair, StringTriple}
@@ -38,6 +37,7 @@ Load execution properties
 =========================
 
   can load using execution monad                                 $normal
+  can load windows-1252 charset encoding using execution monad   $windows1252
   can load fixed length using execution monad                    $fixed
   returns the right load info for no data                        $noData
   returns the right load info for an acceptable number of errors $someErrors
@@ -55,6 +55,25 @@ Load execution properties
     withEnvironment(path(getClass.getResource("/load-execution").toString)) {
       val exec = LoadExec.load[StringPair](conf, List("normal"))
       executesSuccessfully(exec)._2 must_== LoadSuccess(4, 4, 4, 0)
+    }
+  }
+
+  def windows1252 = {
+    val charsetName = "windows-1252"
+    withEnvironment(path(getClass.getResource("/load-execution").toString)) {
+      val windows1252Conf = conf.copy(
+        charsetEncoding = charsetName,
+        clean = Clean.unicodeDefault
+      )
+      val exec = LoadExec.load[StringPair](windows1252Conf, List(charsetName))
+      val (pipe, loadInfo) = executesSuccessfully(exec)
+      loadInfo must_== LoadSuccess(4, 4, 4, 0)
+      executesSuccessfully(pipe.toIterableExecution).map(_._1) must_== List(
+        "é111",
+        "2—22",
+        "33“3",
+        "444®"
+      )
     }
   }
 

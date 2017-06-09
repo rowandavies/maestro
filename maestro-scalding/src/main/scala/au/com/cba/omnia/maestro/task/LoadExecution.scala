@@ -21,19 +21,18 @@ import java.util.UUID
 import scala.reflect.runtime.currentMirror
 import scala.reflect.{ClassTag, classTag}
 import scala.util.control.NonFatal
-import scala.util.hashing.MurmurHash3
 
 import scalaz.\/
 
 import org.apache.hadoop.io.{BytesWritable, NullWritable}
-import org.apache.hadoop.fs.{FileSystem, Path}
 
 import cascading.flow.FlowProcess
 import cascading.operation.{BaseOperation, Function, FunctionCall, OperationCall}
+import cascading.scheme.local.TextLine
 import cascading.tap.hadoop.io.MultiInputSplit.CASCADING_SOURCE_PATH
 import cascading.tuple.Tuple
 
-import com.twitter.scalding.{Execution, ExecutionCounters, MultipleTextLineFiles, TypedPipe, Stat}
+import com.twitter.scalding.{Execution, ExecutionCounters, FixedPathSource, TextLineScheme, TypedPipe, Stat}
 import com.twitter.scalding.typed.TypedPipeFactory
 import com.twitter.scalding.Dsl._ // Pipe.eachTo
 
@@ -124,27 +123,32 @@ object LoadInfo {
 /**
   * Configuration options for load
   *
-  * @param errors:         The hdfs path used to store rows which failed processing.
-  * @param splitter:       The `Splitter` used to split rows into fields.
+  * @param errors          The hdfs path used to store rows which failed processing.
+  * @param splitter        The `Splitter` used to split rows into fields.
   *                        Defaults to splitting on the "|" character.
-  * @param timeSource:     The `TimeSource` used to find the effective date for each row.
+  * @param timeSource      The `TimeSource` used to find the effective date for each row.
   *                        Defaults to pulling the year, month, and day from the
   *                        directory structure of the input file.
-  * @param generateKey:    If true, load will append a unique key to each row.
+  * @param generateKey     If true, load will append a unique key to each row.
   *                        Defaults to false.
-  * @param filter:         The `RowFilter` which scans each row after splitting,
+  * @param filter          The `RowFilter` which scans each row after splitting,
   *                        potentially discarding bad rows. Defaults to now filtering.
-  * @param clean:          The `Clean` function to be applied to each field.
-  *                        Defaults to trimming fields and removing non-printable characters.
-  * @param none:           The field value denoting a `None` value for an optional field.
+  * @param clean           The `Clean` function to be applied to each field.
+  *                        Defaults to trimming fields and removing non-printable, non-ASCII characters.
+  * @param none            The field value denoting a `None` value for an optional field.
   *                        Optional string fields are `None` only if they match this value.
   *                        Other optional fields are `None` if they match this or the empty string.
   *                        Defaults to the empty sring.
-  * @param validator:      The `Validator` to check the thrift struct to ensure it is correct.
+  * @param validator       The `Validator` to check the thrift struct to ensure it is correct.
   *                        Defaults to no validation.
-  * @param errorThreshold: The fraction of rows that can fail during the load step
+  * @param errorThreshold  The fraction of rows that can fail during the load step
   *                        before the overall job should fail. Defaults to 0.05 or 5%.
-  * @param splitSize:      The size of each split in the job that processes the
+  * @param charsetEncoding The Scalding text encoding (Cascading charset) for parsing text files.
+  *                        Defaults to `TextLine.DEFAULT_CHARSET`, which is UTF-8.
+  *                        However, the default vaule of `clean` will remove non-ASCII characters,
+  *                        so consider an alternative like `Clean.unicodeDefault` if
+  *                        you need to preserve non-ASCII characters from the source.
+  * @param splitSize       The size of each split in the job that processes the
   *                        pipe returned by load. Defaults to 9 blocks, with the
   *                        hope that this will result in 2-block parquet files.
   */
@@ -158,6 +162,7 @@ case class LoadConfig[A](
   none: String            = "",
   validator: Validator[A] = Validator.all[A](),
   errorThreshold: Double  = 0.05,
+  charsetEncoding: String = TextLine.DEFAULT_CHARSET,
   splitSize: Long         = 9L * 128 * 1024 * 1024
 )
 
@@ -188,12 +193,18 @@ trait LoadExecution {
   * We may change this without considering backwards compatibility.
   */
 object LoadEx {
+  /** Like `com.twitter.scalding.MultipleTextLineFiles` but supports an explicit `TextSourceScheme.textEncoding`.
+    * @param textEncoding a charset string (upstream default was `cascading.scheme.local.TextLine.DEFAULT_CHARSET`).
+    */
+  case class MultipleTextLineFilesWithTextEncoding(override val textEncoding: String, p: String*)
+    extends FixedPathSource(p: _*) with TextLineScheme
+
   def execution[A <: ThriftStruct : Decode : Tag : ClassTag](
     config: LoadConfig[A], sources: List[String]
   ): Execution[(TypedPipe[A], LoadInfo)] = {
     val rawRows =
-      if (config.generateKey) pipeWithDateAndKey(sources, config.timeSource)
-      else                    pipeWithDate(sources, config.timeSource)
+      if (config.generateKey) pipeWithDateAndKey(sources, config.timeSource, config.charsetEncoding)
+      else                    pipeWithDate(sources, config.timeSource, config.charsetEncoding)
 
     Execution.withId { id => Paths.tempDir.flatMap { tmpDir => {
       val stat        = Stat(StatKeys.tuplesFiltered)(id)
@@ -251,21 +262,21 @@ object LoadEx {
       .toDisjunction
       .leftMap(_.fold(identity, _.toString, { case (msg, ex) => s"$msg: $ex"}))
 
-  def pipeWithDate(sources: List[String], timeSource: TimeSource): TypedPipe[RawRow] =
+  def pipeWithDate(sources: List[String], timeSource: TimeSource, textEncoding: String): TypedPipe[RawRow] =
     TypedPipeFactory { (flowDef, mode) =>
       TypedPipe.fromSingleField[RawRow](
-        MultipleTextLineFiles(sources: _*)
+        MultipleTextLineFilesWithTextEncoding(textEncoding, sources: _*)
           .read(flowDef, mode)
           .eachTo(('offset, 'line), 'result)(_ => new ExtractTime(timeSource))
       )(flowDef, mode)
     }
 
-  def pipeWithDateAndKey(sources: List[String], timeSource: TimeSource): TypedPipe[RawRow] = {
+  def pipeWithDateAndKey(sources: List[String], timeSource: TimeSource, textEncoding: String): TypedPipe[RawRow] = {
     val rnd    = new SecureRandom()
     val seed   = rnd.generateSeed(4)
     TypedPipeFactory { (flowDef, mode) =>
       TypedPipe.fromSingleField[RawRow](
-        MultipleTextLineFiles(sources: _*)
+        MultipleTextLineFilesWithTextEncoding(textEncoding, sources: _*)
           .read(flowDef, mode)
           .eachTo(('offset, 'line), 'result)(_ => new GenerateKey(timeSource, seed))
       )(flowDef, mode)
