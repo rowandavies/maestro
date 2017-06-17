@@ -69,15 +69,17 @@ object Clean {
   def removeUnicodeNonSupplementaryNonPrintables: Clean =
     Clean((_, data) => data.replaceAll(s"(?U)[^${unicodeSupplementarySurrogatePattern}\\p{Print}]", ""))
 
+  /** See `posixDefault`. */
   def default: Clean = posixDefault
 
-  /** Legacy posix support will fail to trim spaces that are surrounded
-    * by removable control characters.
+  /** Trim then keep POSIX US-ASCII printables only: this legacy posix support
+    * will fail to trim spaces that are surrounded by removable control characters.
     * For example, "\u007f a" will be returned as " a".
     */
   def posixDefault: Clean = all(trim, removeNonPrintables)
 
-  /** Default Unicode support will filter out non-printables first,
+  /** Keep Unicode Plane 0 printables only, then trim: default Unicode support
+    * will filter out Plane 0 non-printables and higher-plane surrogates first,
     * then trim any remaining spaces.
     * For example, "\u007f a" will be returned as "a".
     *
@@ -87,19 +89,20 @@ object Clean {
     */
   def unicodeDefault: Clean = all(removeUnicodeNonPrintables, trim)
 
-  /** Default Unicode support will filter out non-printables first,
-    * then trim any remaining spaces.
+  /** Supplementary Unicode support will filter out Plane 0 non-printables and
+    * higher-plane private-use surrogates first, then trim any remaining spaces.
     * For example, "\u007f a" will be returned as "a".
     *
     * Supports higher-plane supplementary surrogate characters,
     * except Private Use areas.
     * Surrogate characters may be mishandled by some Unicode systems
     * and higher planes are unallocated.
+    * Therefore, this option can pose operational risks.
     */
   def unicodeSupplementaryDefault: Clean = all(removeUnicodeNonSupplementaryNonPrintables, trim)
 
-  /** Legacy Unicode support will fail to trim spaces that are surrounded
-    * by removable control characters.
+  /** Trim then keep Unicode Plane 0 printables only: this legacy Unicode support
+    * will fail to trim spaces that are surrounded by removable control characters.
     * For example, "\u007f a" will be returned as " a".
     *
     * Supports Plane 0 (Basic Multilingual Plane) only.
