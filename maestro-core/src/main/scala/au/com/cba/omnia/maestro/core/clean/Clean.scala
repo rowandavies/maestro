@@ -23,7 +23,26 @@ case class Clean(run: (Field[_, _], String) => String) {
     Clean((field, data) => if (conditionFn(field)) run(field, data) else data)
 }
 
+/** Remove control characters (including newlines) and/or
+  * trim leading/trailing whitespace.
+  *
+  * <table>
+  * <thead>
+  * <tr><th><b>Option</b></th><th><b>Process</b></th><th><b>Characters</b></th></tr>
+  * </thead>
+  * <tr><td>posixDefault (legacy)</td><td>Trim then Clean</td><td>US-ASCII printables only</td></tr>
+  * <tr><td>unicodeLegacyDefault</td><td>Trim then Clean</td><td>Plane 0 printables only</td></tr>
+  * <tr><td>unicodeDefault</td><td>Clean then Trim</td><td>Plane 0 printables only</td></tr>
+  * <tr><td>unicodeSupplementaryDefault</td><td>Clean then Trim</td><td>Plane 0 printables plus Surrogates in higher planes</td></tr>
+  * </table>
+  */
 object Clean {
+
+  /** Regex pattern to match supplementary plane surrogate characters (other than Private Use areas).
+    * @see https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Surrogates
+    */
+  val unicodeSupplementarySurrogatePattern = "\\uD800-\\uDB7F\\uDC00-\\uDFFF"
+
   def all(cleans: Clean*): Clean =
     Clean((field, data) => cleans.foldLeft(data)((acc, clean) => clean.run(field, acc)))
 
@@ -36,17 +55,58 @@ object Clean {
   def removeNonPrintables: Clean =
     Clean((_, data) => data.replaceAll("[^\\p{Print}]", ""))
 
-  /** Keep Unicode printables only.
+  /** Keep Unicode printables in Plane 0 (Basic Multilingual Plane) only.
     * @see http://www.unicode.org/reports/tr18/#Compatibility_Properties
     */
   def removeUnicodeNonPrintables: Clean =
-    Clean((_, data) => data.replaceAll("(?U)[^\\p{Print}]", ""))
+    Clean((_, data) => data
+      .replaceAll(s"[\\x{10000}-\\x{10FFFF}]", "")
+      .replaceAll("(?U)[^\\p{Print}]", ""))
+
+  /** Keep Unicode printables and supplementary (surrogate) characters like emoji,
+    * but remove Private Use areas.
+    */
+  def removeUnicodeNonSupplementaryNonPrintables: Clean =
+    Clean((_, data) => data.replaceAll(s"(?U)[^${unicodeSupplementarySurrogatePattern}\\p{Print}]", ""))
 
   def default: Clean = posixDefault
 
+  /** Legacy posix support will fail to trim spaces that are surrounded
+    * by removable control characters.
+    * For example, "\u007f a" will be returned as " a".
+    */
   def posixDefault: Clean = all(trim, removeNonPrintables)
 
-  def unicodeDefault: Clean = all(trim, removeUnicodeNonPrintables)
+  /** Default Unicode support will filter out non-printables first,
+    * then trim any remaining spaces.
+    * For example, "\u007f a" will be returned as "a".
+    *
+    * Supports Plane 0 (Basic Multilingual Plane) only.
+    * This Plane is widely supported by Unicode systems and
+    * has a well-defined printable set.
+    */
+  def unicodeDefault: Clean = all(removeUnicodeNonPrintables, trim)
+
+  /** Default Unicode support will filter out non-printables first,
+    * then trim any remaining spaces.
+    * For example, "\u007f a" will be returned as "a".
+    *
+    * Supports higher-plane supplementary surrogate characters,
+    * except Private Use areas.
+    * Surrogate characters may be mishandled by some Unicode systems
+    * and higher planes are unallocated.
+    */
+  def unicodeSupplementaryDefault: Clean = all(removeUnicodeNonSupplementaryNonPrintables, trim)
+
+  /** Legacy Unicode support will fail to trim spaces that are surrounded
+    * by removable control characters.
+    * For example, "\u007f a" will be returned as " a".
+    *
+    * Supports Plane 0 (Basic Multilingual Plane) only.
+    * This Plane is widely supported by Unicode systems and
+    * has a well-defined printable set.
+    */
+  def unicodeLegacyDefault: Clean = all(trim, removeUnicodeNonPrintables)
 
   /** Allow users to apply cleaners on selected fields */
   def applyTo(conditionFn: Field[_, _] => Boolean, cleaner: Clean): Clean =
